@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/gelembjuk/articletext"
@@ -13,12 +14,43 @@ import (
 
 func createArticleList(articles []Article) *tview.List {
 	list := tview.NewList().ShowSecondaryText(true).SetSecondaryTextColor(tcell.ColorGray)
+	now := time.Now()
 	for _, article := range articles {
-		// Display title and domain only (no comment count from RSS)
-		list.AddItem(article.Title, article.Domain, 0, nil)
+		secondaryText := article.Published
+		if relativeTime := formatRelativeTime(now, article.PublishedAt); relativeTime != "" {
+			secondaryText += " (" + relativeTime + ")"
+		}
+		list.AddItem(article.Title, secondaryText, 0, nil)
 	}
 
 	return list
+}
+
+func formatRelativeTime(now time.Time, publishedAt time.Time) string {
+	if publishedAt.IsZero() {
+		return ""
+	}
+
+	elapsed := now.Sub(publishedAt)
+	if elapsed < 0 {
+		elapsed = 0
+	}
+	if elapsed < time.Minute {
+		return "just now"
+	}
+	if elapsed < time.Hour {
+		minutes := int(elapsed.Minutes())
+		if minutes == 1 {
+			return "1 minute ago"
+		}
+		return fmt.Sprintf("%d minutes ago", minutes)
+	}
+
+	hours := int(elapsed.Hours())
+	if hours == 1 {
+		return "1 hour ago"
+	}
+	return fmt.Sprintf("%d hours ago", hours)
 }
 
 func fetchAndGenerateList() (*tview.List, []Article, error) {

@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -17,6 +18,8 @@ type Article struct {
 	Comments     string // Comment count as string (empty for RSS-based list)
 	CommentsLink string // GeekNews topic URL
 	Domain       string // Extracted from Link or "news.hada.io" if Link is topic URL
+	Published    string // Display time from RSS published timestamp
+	PublishedAt  time.Time
 }
 
 // Comment represents a comment from GeekNews
@@ -36,12 +39,13 @@ type AtomFeed struct {
 
 // AtomEntry represents a single entry in the Atom feed
 type AtomEntry struct {
-	Title   string     `xml:"title"`
-	Links   []AtomLink `xml:"link"`
-	ID      string     `xml:"id"`
-	Updated string     `xml:"updated"`
-	Author  AtomAuthor `xml:"author"`
-	Content string     `xml:"content"`
+	Title     string     `xml:"title"`
+	Links     []AtomLink `xml:"link"`
+	ID        string     `xml:"id"`
+	Updated   string     `xml:"updated"`
+	Published string     `xml:"published"`
+	Author    AtomAuthor `xml:"author"`
+	Content   string     `xml:"content"`
 }
 
 // AtomLink represents a link element in Atom
@@ -55,6 +59,41 @@ type AtomLink struct {
 type AtomAuthor struct {
 	Name string `xml:"name"`
 	URI  string `xml:"uri"`
+}
+
+func rssTimestamp(published, updated string) string {
+	raw := strings.TrimSpace(published)
+	if raw == "" {
+		raw = strings.TrimSpace(updated)
+	}
+	return raw
+}
+
+func parseRSSTime(published, updated string) time.Time {
+	raw := rssTimestamp(published, updated)
+	if raw == "" {
+		return time.Time{}
+	}
+
+	parsed, err := time.Parse(time.RFC3339, raw)
+	if err != nil {
+		return time.Time{}
+	}
+	return parsed
+}
+
+// formatRSSDisplayTime formats RSS timestamps for list display.
+func formatRSSDisplayTime(published, updated string) string {
+	raw := rssTimestamp(published, updated)
+	if raw == "" {
+		return ""
+	}
+
+	parsed := parseRSSTime(published, updated)
+	if parsed.IsZero() {
+		return raw
+	}
+	return parsed.Format("06-01-02 15:04")
 }
 
 // parseGeekNewsRSS parses the GeekNews Atom feed and returns articles
@@ -86,6 +125,8 @@ func parseGeekNewsRSS(xmlData string) ([]Article, error) {
 			Comments:     "", // Not available in RSS
 			CommentsLink: topicURL,
 			Domain:       "news.hada.io",
+			Published:    formatRSSDisplayTime(entry.Published, entry.Updated),
+			PublishedAt:  parseRSSTime(entry.Published, entry.Updated),
 		}
 
 		articles = append(articles, article)

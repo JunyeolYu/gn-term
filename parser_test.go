@@ -34,6 +34,12 @@ func TestParseGeekNewsRSS(t *testing.T) {
 	if articles[0].Domain != "news.hada.io" {
 		t.Errorf("Expected Domain 'news.hada.io', got %q", articles[0].Domain)
 	}
+	if articles[0].Published != "26-02-03 14:31" {
+		t.Errorf("Expected Published '26-02-03 14:31', got %q", articles[0].Published)
+	}
+	if articles[0].PublishedAt.IsZero() {
+		t.Error("Expected PublishedAt to be parsed")
+	}
 
 	// Test second article
 	if articles[1].Title != "Todd C. Miller – 30년 넘게 Sudo를 유지보수한 개발자" {
