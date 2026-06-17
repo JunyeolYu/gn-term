@@ -184,6 +184,18 @@ func TestFormatTopicContent(t *testing.T) {
 		t.Error("Expected title in formatted output")
 	}
 
+	// Check external link is included below the title.
+	foundExternalLink := false
+	for _, line := range lines {
+		if strings.Contains(line, "(https://example.com/article)") {
+			foundExternalLink = true
+			break
+		}
+	}
+	if !foundExternalLink {
+		t.Error("Expected external link in formatted output")
+	}
+
 	// Check meta info is included
 	foundMeta := false
 	for _, line := range lines {
@@ -242,5 +254,25 @@ func TestFormatCommentsDeletedComment(t *testing.T) {
 	}
 	if !found {
 		t.Error("Expected deleted comment indicator '[삭제됨]'")
+	}
+}
+
+func TestContentWidthForTerminal(t *testing.T) {
+	tests := []struct {
+		name  string
+		width int
+		want  int
+	}{
+		{name: "below minimum", width: 40, want: 80},
+		{name: "at minimum", width: 80, want: 80},
+		{name: "above minimum", width: 132, want: 132},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := contentWidthForTerminal(tt.width); got != tt.want {
+				t.Errorf("contentWidthForTerminal(%d) = %d, want %d", tt.width, got, tt.want)
+			}
+		})
 	}
 }

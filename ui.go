@@ -194,7 +194,9 @@ func displayArticle(app *tview.Application, pages *tview.Pages, text string) {
 	articleTextView := tview.NewTextView().
 		SetText(text).
 		SetDynamicColors(true).
-		SetScrollable(true)
+		SetScrollable(true).
+		SetWrap(true).
+		SetWordWrap(true)
 
 	pages.AddPage("article", articleTextView, true, true)
 	app.SetRoot(pages, true)
@@ -204,7 +206,9 @@ func displayComments(app *tview.Application, pages *tview.Pages, text string) {
 	commentsTextView := tview.NewTextView().
 		SetText(text).
 		SetDynamicColors(true).
-		SetScrollable(true)
+		SetScrollable(true).
+		SetWrap(true).
+		SetWordWrap(true)
 
 	pages.AddPage("comments", commentsTextView, true, true)
 	app.SetRoot(pages, true)

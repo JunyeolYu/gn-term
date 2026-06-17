@@ -11,6 +11,8 @@ import (
 	"jaytaylor.com/html2text"
 )
 
+const minContentWidth = 80
+
 // getTerminalWidth returns the current terminal width, or a default if unavailable
 func getTerminalWidth() int {
 	width, _, err := term.GetSize(int(os.Stdout.Fd()))
@@ -18,6 +20,17 @@ func getTerminalWidth() int {
 		return 120 // default fallback
 	}
 	return width
+}
+
+func contentWidthForTerminal(width int) int {
+	if width < minContentWidth {
+		return minContentWidth
+	}
+	return width
+}
+
+func getContentWidth() int {
+	return contentWidthForTerminal(getTerminalWidth())
 }
 
 const geekNewsBaseURL = "https://news.hada.io/"
@@ -58,9 +71,7 @@ func fetchGeekNewsComments(topicID string) []string {
 	if err == nil && topicContent.Body != "" {
 		lines = append(lines, formatTopicContent(topicContent)...)
 		lines = append(lines, "")
-		// Create separator line matching half terminal width
-		separatorWidth := getTerminalWidth() / 2
-		lines = append(lines, strings.Repeat("─", separatorWidth))
+		lines = append(lines, strings.Repeat("─", getContentWidth()))
 		lines = append(lines, "")
 	}
 
@@ -83,11 +94,14 @@ func fetchGeekNewsComments(topicID string) []string {
 // formatTopicContent formats the topic content (title, meta, body) for display
 func formatTopicContent(content *TopicContent) []string {
 	var lines []string
-	maxWidth := getTerminalWidth() / 2
+	maxWidth := getContentWidth()
 
 	// Title
 	if content.Title != "" {
 		lines = append(lines, "[yellow]"+content.Title+"[-]")
+		if content.ExternalLink != "" {
+			lines = append(lines, "[gray]("+content.ExternalLink+")[-]")
+		}
 		lines = append(lines, "")
 	}
 
@@ -136,7 +150,7 @@ func formatTopicContent(content *TopicContent) []string {
 // formatComments formats a list of comments for display
 func formatComments(comments []Comment) []string {
 	var lines []string
-	maxWidth := getTerminalWidth() / 2
+	maxWidth := getContentWidth()
 
 	for _, comment := range comments {
 		// Create indentation based on depth (limit visual depth to 4 for readability)
