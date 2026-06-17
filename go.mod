@@ -1,4 +1,4 @@
-module github.com/sappho192/gn-text
+module github.com/JunyeolYu/gn-term
 
 go 1.21.1
 

@@ -4,7 +4,7 @@ This file provides guidance for Claude Code when working with this repository.
 
 ## Project Overview
 
-gn-text is a terminal-based GeekNews (news.hada.io) reader written in Go. It provides a TUI (Terminal User Interface) for browsing Korean tech news.
+gn-term is a terminal-based GeekNews (news.hada.io) reader written in Go. It provides a TUI (Terminal User Interface) for browsing Korean tech news.
 
 ## Tech Stack
 
@@ -64,7 +64,7 @@ goreleaser release --snapshot --clean
 3. GitHub Actions automatically:
    - Builds binaries for linux/darwin/windows (amd64/arm64)
    - Creates GitHub Release
-   - Updates Homebrew tap (sappho192/homebrew-tap)
+   - Updates Homebrew tap (JunyeolYu/homebrew-tap)
    - Publishes Chocolatey package
 
 ## Code Conventions

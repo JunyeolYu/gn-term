@@ -20,7 +20,8 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21'
+          go-version-file: go.mod
+          cache: true
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
@@ -50,14 +51,14 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.VERSION }}"
-          $url = "https://github.com/sappho192/gn-text/releases/download/v${version}/gn-text_${version}_windows_amd64.zip"
-          Invoke-WebRequest -Uri $url -OutFile "gn-text.zip"
+          $url = "https://github.com/JunyeolYu/gn-term/releases/download/v${version}/gn-term_${version}_windows_amd64.zip"
+          Invoke-WebRequest -Uri $url -OutFile "gn-term.zip"
 
       - name: Calculate checksum
         id: checksum
         shell: pwsh
         run: |
-          $hash = (Get-FileHash -Path "gn-text.zip" -Algorithm SHA256).Hash.ToLower()
+          $hash = (Get-FileHash -Path "gn-term.zip" -Algorithm SHA256).Hash.ToLower()
           echo "CHECKSUM=$hash" >> $env:GITHUB_OUTPUT
 
       - name: Prepare Chocolatey package
@@ -67,9 +68,9 @@ jobs:
           $checksum = "${{ steps.checksum.outputs.CHECKSUM }}"
 
           # Update nuspec version
-          $nuspec = Get-Content "chocolatey/gn-text.nuspec" -Raw
+          $nuspec = Get-Content "chocolatey/gn-term.nuspec" -Raw
           $nuspec = $nuspec -replace '\$version\$', $version
-          Set-Content "chocolatey/gn-text.nuspec" $nuspec
+          Set-Content "chocolatey/gn-term.nuspec" $nuspec
 
           # Update install script version and checksum
           $install = Get-Content "chocolatey/tools/chocolateyinstall.ps1" -Raw
@@ -90,4 +91,4 @@ jobs:
         run: |
           $version = "${{ steps.version.outputs.VERSION }}"
           cd chocolatey
-          choco push "gn-text.${version}.nupkg" --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY
+          choco push "gn-term.${version}.nupkg" --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY

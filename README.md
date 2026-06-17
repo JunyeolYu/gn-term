@@ -1,39 +1,39 @@
-# gn-text
+# gn-term
 
 Terminal-based [GeekNews](https://news.hada.io) reader for Korean tech news.
 
-![Go Version](https://img.shields.io/github/go-mod/go-version/sappho192/gn-text)
-![License](https://img.shields.io/github/license/sappho192/gn-text)
-![Release](https://img.shields.io/github/v/release/sappho192/gn-text)
+![Go Version](https://img.shields.io/github/go-mod/go-version/JunyeolYu/gn-term)
+![License](https://img.shields.io/github/license/JunyeolYu/gn-term)
+![Release](https://img.shields.io/github/v/release/JunyeolYu/gn-term)
 
 ## Installation
 
 ### Go
 
 ```bash
-go install github.com/sappho192/gn-text@latest
+go install github.com/JunyeolYu/gn-term@latest
 ```
 
 ### Homebrew (macOS/Linux)
 
 ```bash
-brew install sappho192/tap/gn-text
+brew install JunyeolYu/tap/gn-term
 ```
 
 ### Chocolatey (Windows)
 
 ```bash
-choco install gn-text
+choco install gn-term
 ```
 
 ### Manual Download
 
-Download the binary from [GitHub Releases](https://github.com/sappho192/gn-text/releases).
+Download the binary from [GitHub Releases](https://github.com/JunyeolYu/gn-term/releases).
 
 ## Usage
 
 ```bash
-gn-text
+gn-term
 ```
 
 ### Keyboard Shortcuts
@@ -63,9 +63,9 @@ Article List → Comments → Article Content
 ## Version
 
 ```bash
-gn-text -v
+gn-term -v
 # or
-gn-text --version
+gn-term --version
 ```
 
 ## License

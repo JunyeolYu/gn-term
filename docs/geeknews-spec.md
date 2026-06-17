@@ -1,4 +1,4 @@
-# GeekNews TUI Specification (gn-text)
+# GeekNews TUI Specification (gn-term)
 
 **Version**: 1.0.0
 **Date**: 2026-02-03
@@ -7,9 +7,9 @@
 ## 1. Project Overview
 
 ### 1.1 Project Name
-- **Name**: `gn-text` (GeekNews Text)
+- **Name**: `gn-term` (GeekNews Terminal)
 - **Description**: Terminal-based UI for browsing GeekNews (news.hada.io) headlines, articles, and comments.
-- **Rationale**: Maintains naming consistency with `hn-text` while clearly indicating GeekNews as the target platform.
+- **Rationale**: Clearly indicates GeekNews as the target platform and a terminal-based interface.
 
 ### 1.2 Goals
 - Replace HN-specific implementation with GeekNews support
@@ -84,7 +84,7 @@
 - In-memory cache with TTL: 5-10 minutes
 - Disk cache with TTL: 30-60 minutes
 - Cache keys: URL-based
-- Storage location: `~/.cache/gn-text/` (or OS-specific cache dir)
+- Storage location: `~/.cache/gn-term/` (or OS-specific cache dir)
 - Invalidation: Manual via 'r' key, automatic on TTL expiry
 
 #### `extractor.go` (New Module)
@@ -129,7 +129,7 @@
 ### 3.5 Article Extraction Intelligence (Post-MVP)
 - **Success Rate Tracking**:
   - Track success/failure per extractor library
-  - Store stats in `~/.cache/gn-text/extractor-stats.json`
+  - Store stats in `~/.cache/gn-term/extractor-stats.json`
   - Update after each extraction attempt
 - **Dynamic Prioritization**:
   - Reorder extraction libraries based on success rate
@@ -145,7 +145,7 @@
   - Eviction: LRU when memory limit reached
 - **Disk Cache**:
   - TTL: 30-60 minutes
-  - Storage: `~/.cache/gn-text/`
+  - Storage: `~/.cache/gn-term/`
   - Format: JSON or gob encoding
   - Cleanup: On app start, remove expired entries
 - **Invalidation**: Manual via 'r' key
@@ -349,7 +349,7 @@ type CacheEntry struct {
   .PHONY: build test install clean
 
   build:
-      go build -o gn-text .
+      go build -o gn-term .
 
   test:
       go test -v ./...
@@ -358,7 +358,7 @@ type CacheEntry struct {
       go install .
 
   clean:
-      rm -f gn-text
+      rm -f gn-term
       rm -rf dist/
   ```
 
@@ -371,7 +371,7 @@ type CacheEntry struct {
 
 ### 10.3 Distribution
 - **Primary**: GitHub Releases (download binary)
-- **Go Install**: `go install github.com/piqoni/gn-text@latest`
+- **Go Install**: `go install github.com/JunyeolYu/gn-term@latest`
 - **Homebrew**: Future enhancement (create tap)
 
 ---
@@ -424,7 +424,7 @@ type CacheEntry struct {
   - Retry count: 2 attempts
 
 ### 12.2 Future Configuration (Post-MVP)
-- **File**: `~/.config/gn-text/config.yaml`
+- **File**: `~/.config/gn-term/config.yaml`
 - **Fields**:
   ```yaml
   wrap_width: 80
@@ -466,7 +466,7 @@ type CacheEntry struct {
 **Goal**: Basic functionality working end-to-end
 
 1. **Setup**:
-   - Rename project to `gn-text`
+   - Rename project to `gn-term`
    - Update module path in `go.mod`
    - Add `github.com/mattn/go-runewidth` dependency
 
@@ -511,7 +511,7 @@ type CacheEntry struct {
 2. Implement fallback chain for article extraction
 3. Add success rate tracking
 4. Implement dynamic prioritization algorithm
-5. Store stats in `~/.cache/gn-text/extractor-stats.json`
+5. Store stats in `~/.cache/gn-term/extractor-stats.json`
 
 ### 14.4 Phase 4: Polish (Post-MVP)
 1. Add `?` key for help screen

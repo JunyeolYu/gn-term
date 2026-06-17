@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 
 	if *versionFlag {
-		fmt.Println("gn-text version", version)
+		fmt.Println("gn-term version", version)
 		os.Exit(0)
 	}
 

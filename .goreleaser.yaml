@@ -1,6 +1,6 @@
 version: 2
 
-project_name: gn-text
+project_name: gn-term
 
 builds:
   - env:
@@ -13,7 +13,7 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X main.version={{.Version}}
+      - -s -w -X main.version={{ .Version }}
 
 archives:
   - formats:
@@ -27,9 +27,9 @@ archives:
 
 brews:
   - repository:
-      owner: sappho192
+      owner: JunyeolYu
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    homepage: https://github.com/sappho192/gn-text
+    homepage: https://github.com/JunyeolYu/gn-term
     description: Terminal-based GeekNews reader for Korean tech news
     license: MIT
